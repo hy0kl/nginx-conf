@@ -21,3 +21,12 @@
 *.i*86
 *.x86_64
 *.hex
+
+# vim 临时文件
+*~
+*.swp
+*.swo
+*.dSYM
+a.out
+tags
+
