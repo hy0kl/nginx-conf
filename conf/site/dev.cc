@@ -1,8 +1,8 @@
 server {
     listen       80;
-    server_name  dev.cc;
+    server_name  dev.cc localhost;
 
-    root /home/work/nginx/html;
+    root html;
     access_log  logs/dev.access.log  main;
 
 
@@ -53,7 +53,7 @@ server {
     location ~ \.php$ {
         include        fastcgi_params;
         fastcgi_pass   127.0.0.1:9000;
-        fastcgi_param  SCRIPT_FILENAME  $document_root/$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         fastcgi_index  index.php;
     }
 

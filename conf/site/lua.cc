@@ -39,11 +39,11 @@ server {
 
         #rewrite_by_lua_file /path/to/rewrite.lua;
         #access_by_lua_file /path/to/access.lua;
-        content_by_lua_file /home/UserName/local/nginx/lua/content.lua;
+        content_by_lua_file lua/content.lua;
     }
 
     location /lua-cjson {
         default_type "application/x-javascript";
-        content_by_lua_file /home/UserName/local/nginx/lua/cjson.lua;
+        content_by_lua_file lua/cjson.lua;
     }
 }
