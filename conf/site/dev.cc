@@ -3,7 +3,8 @@ server {
     server_name  dev.cc localhost;
 
     root html;
-    access_log  logs/dev.access.log  main;
+    #access_log  logs/dev.access.log  main;
+    access_log  logs/dev.access.log  dev;
 
 
     location / {
