@@ -58,6 +58,13 @@ server {
         fastcgi_index  index.php;
     }
 
+    location /nginx_status {
+        stub_status on;
+        access_log   off;
+        #allow  10.2.48.0/24;
+        #deny all;
+    }
+
     # deny access to .htaccess files, if Apache's document root
     # concurs with nginx's one
     #
