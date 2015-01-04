@@ -39,6 +39,12 @@ server {
         break;
     }
 
+    location ~ /chart.php {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_param  SCRIPT_FILENAME   /home/work/rd/analyze/chart.php;
+        include        fastcgi_params;
+    }
+
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #location ~ \.php$ {
     # 其他请求一律单一入口处理
