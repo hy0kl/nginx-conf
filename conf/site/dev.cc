@@ -52,6 +52,11 @@ server {
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
     location ~ \.php$ {
+        if ($request_uri ~* test\.php\?a=b)
+        {
+            rewrite /test.php?(.*) /phpinfo.php?$1 break;
+        }
+
         include        fastcgi_params;
         fastcgi_pass   127.0.0.1:9000;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
