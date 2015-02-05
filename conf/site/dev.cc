@@ -6,6 +6,11 @@ server {
     #access_log  logs/dev.access.log  main;
     access_log  logs/dev.access.log  dev;
 
+    # 识别移动设备
+    if ($http_user_agent ~ (iPhone|iPad|Android))
+    {
+        rewrite ^/(.*)$ http://m.dev.cc/$1 break;
+    }
 
     location / {
         index index.php index.html index.htm;
