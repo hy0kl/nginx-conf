@@ -54,6 +54,12 @@ server {
     #    proxy_pass   http://127.0.0.1;
     #}
 
+    location ~ /plate/get_egg_data/ {
+        fastcgi_pass   127.0.0.1:9000;
+        include        fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME   /home/work/api/get_egg_data.php;
+    }
+
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
     location ~ \.php$ {
