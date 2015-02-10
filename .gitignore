@@ -34,3 +34,6 @@ tags
 html
 logs
 sbin
+
+# mac 临时目录
+.DS_Store
