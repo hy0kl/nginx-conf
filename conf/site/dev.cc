@@ -60,6 +60,18 @@ server {
         fastcgi_param  SCRIPT_FILENAME   /home/work/api/get_egg_data.php;
     }
 
+    location ~ /\.ht {
+        deny  all;
+    }
+
+    location ~ /\.git {
+        deny  all;
+    }
+
+    location ~ /\.svn {
+        deny  all;
+    }
+
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
     location ~ \.php$ {
