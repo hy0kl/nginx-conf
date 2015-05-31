@@ -29,11 +29,6 @@ server {
         root   html;
     }
 
-    # 静态文件代理
-    location ~ /static/ {
-        rewrite "^/static/(.*)$" /static/$1 break;  # break 重写后不再续费路由
-    }
-
     # 不记录 favicon.ico 错误日志
     location ~ (favicon.ico){
         log_not_found off;
@@ -45,6 +40,11 @@ server {
     location ~* \.(ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
         expires max;
         break;
+    }
+
+    # 静态文件代理
+    location ~ /static/ {
+        rewrite "^/static/(.*)$" /static/$1 break;  # break 重写后不再续费路由
     }
 
     # proxy the PHP scripts to Apache listening on 127.0.0.1:80
