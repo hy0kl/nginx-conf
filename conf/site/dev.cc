@@ -1,5 +1,5 @@
 server {
-    listen       80;
+    listen       80 default_server;
     server_name  dev.cc localhost;
 
     root html;
@@ -7,10 +7,10 @@ server {
     access_log  logs/dev.access.log  dev;
 
     # 识别移动设备
-    if ($http_user_agent ~ (iPhone|iPad|Android))
-    {
-        rewrite ^/(.*)$ http://m.dev.cc/$1 break;
-    }
+    #if ($http_user_agent ~ (iPhone|iPad|Android))
+    #{
+    #    rewrite ^/(.*)$ http://m.dev.cc/$1 break;
+    #}
 
     location / {
         index index.php index.html index.htm;
