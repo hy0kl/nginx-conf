@@ -4,7 +4,7 @@ map $http_upgrade $connection_upgrade {
 }
 
 upstream websocket {
-    server 192.168.66.136:8010; 
+    server 192.168.66.136:8010;
 }
 
 server {
