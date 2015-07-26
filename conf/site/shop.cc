@@ -1,3 +1,7 @@
+upstream shop.cc {
+    server 127.0.0.1:9000;
+}
+
 server {
     listen       80;
     server_name  shop.cc;
@@ -57,7 +61,7 @@ server {
     #
     location ~ \.php$ {
         include        fastcgi_params;
-        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass   shop.cc;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         fastcgi_index  index.php;
     }
