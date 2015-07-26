@@ -1,28 +1,20 @@
+upstream fdfs.com {
+    server 192.168.64.21:8080;
+}
+
 server {
-    listen       80;
-    server_name  dev.cc localhost;
+    listen       80 default_server;
+    server_name  localhost;
 
     root html;
     #access_log  logs/dev.access.log  main;
-    access_log  logs/dev.access.log  dev;
-
-    # 识别移动设备
-    #if ($http_user_agent ~ (iPhone|iPad|Android))
-    #{
-    #    rewrite ^/(.*)$ http://m.dev.cc/$1 break;
-    #}
-
-    location / {
-        index index.php index.html index.htm;
-
-        # 对 IE 进行限速
-        if ($http_user_agent ~ "MSIE") {
-            limit_rate 1k;
-        }
-    }
+    access_log  logs/localhost.access.log  dev;
 
     #error_page  404              /404.html;
 
+    location / {
+        index index.php index.html index.htm;
+    }
     # redirect server error pages to the static page /50x.html
     #
     error_page   500 502 503 504  /50x.html;
@@ -30,17 +22,21 @@ server {
         root   html;
     }
 
-    # 不记录 favicon.ico 错误日志
-    location ~ (favicon.ico){
-        log_not_found off;
-        expires 100d;
-        access_log off;
+    location ~ /fdfs/(.*) {
+        proxy_pass http://fdfs.com/$1;
     }
 
     # 静态文件设置过期时间
     location ~* \.(ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
         expires max;
         break;
+    }
+
+    # 不记录 favicon.ico 错误日志
+    location ~ (favicon.ico){
+        log_not_found off;
+        expires 100d;
+        access_log off;
     }
 
     # 静态文件代理
@@ -54,11 +50,6 @@ server {
     #    proxy_pass   http://127.0.0.1;
     #}
 
-    location ~ /plate/get_egg_data/ {
-        fastcgi_pass   127.0.0.1:9000;
-        include        fastcgi_params;
-        fastcgi_param  SCRIPT_FILENAME   /home/work/api/get_egg_data.php;
-    }
 
     location ~ /\.ht {
         deny  all;
@@ -75,15 +66,11 @@ server {
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
     location ~ \.php$ {
-        if ($request_uri ~* test\.php\?a=b)
-        {
-            rewrite /test.php?(.*) /phpinfo.php?$1 break;
-        }
-
         include        fastcgi_params;
         fastcgi_pass   127.0.0.1:9000;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         fastcgi_index  index.php;
+        include        fastcgi_params;
     }
 
     location /nginx_status {
