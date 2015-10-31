@@ -23,15 +23,21 @@ local file_exists = function(name)
     local f=io.open(name,"r")
     if f~=nil then io.close(f) return true else return false end
 end
+
+local debug = function(key, value)
+    ngx.print(key .. ': ' .. value);
+    ngx.exit(200);
+end
 -- }}}
 
 local image_size   = ngx.var.image_size;
 local originalUri  = ngx.var.uri;
-local originalFile = ngx.var.file;
+local originalFile = ngx.var.original;
 
 -- check original file
 if not file_exists(originalFile) then
     -- 原始文件不存在,缩略图也不存在
+    -- debug('originalFile', originalFile);
     ngx.exit(404);
 end
 
@@ -45,6 +51,9 @@ function table.contains(table, element)
     end
     return false
 end
+
+-- debug('originalFile', originalFile);
+-- debug('des_file', ngx.var.file);
 
 if table.contains(image_size_conf, image_size) then
     -- check image dir
@@ -63,10 +72,3 @@ else
     ngx.exit(404)
 end
 
--- ngx.print(originalUri);
--- ngx.print("\n");
--- ngx.print(originalFile);
--- ngx.print("\n");
--- ngx.print(ngx.var.image_name);
--- ngx.print("\n");
--- ngx.exit(200);

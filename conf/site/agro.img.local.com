@@ -21,8 +21,8 @@ server {
             rewrite "^/images/(.*)$" /images/$1 break;
         }
 
-        #default_type "text/html";
-        default_type "image/jpeg";
+        default_type "text/html";
+        #default_type "image/jpeg";
         #echo $uri;
 
         set $image_raw_root   "$document_root";
@@ -30,12 +30,13 @@ server {
 
         # uri: /images/thb2/e12/e1200cb72f778bdad4210814463e6e86.png/220x246
         if ($uri ~ "/images/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9.]+)/([a-zA-Z0-9]+)") {
-            echo "$uri <br />$1 $2 $3 $4 $5";
+            #echo "$uri <br />$1 $2 $3 $4 $5";
             set $image_dir "$image_thumb_root/$1/$2/$4";
             set $image_name "$3";
             set $image_size "$4";
             set $image_type "$2";
             set $file "$image_dir/$image_name";
+            set $original   "$document_root/images/$1/$2/$3";
         }
         if (!-f $file) {
             # 关闭lua代码缓存，方便调试lua脚本
