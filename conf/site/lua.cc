@@ -1,7 +1,22 @@
 server {
-    listen       9090;
+    listen       80;
     server_name  luadev.cc;
 
+    location /echo {
+        set $test "abc";
+        echo $document_root$test;
+    }
+
+    location /images {
+        default_type "text/html";
+        #content_by_lua 'ngx.say("hit images.")';
+        #echo $document_root;
+
+        # uri: /images/thb2/e12/e1200cb72f778bdad4210814463e6e86.png/220x246
+        if ($uri ~ "/images/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9.]+)/([a-zA-Z0-9]+)") {
+            echo "$uri <br />$1 $2 $3 $4 $5";
+        }
+    }
 
     # test lua
     location /lua {
