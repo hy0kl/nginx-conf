@@ -1,38 +1,34 @@
 -- 公共方法 {{{
--- 写入文件
-local function writefile(filename, info)
-    local wfile=io.open(filename, "w") --写入文件(w覆盖)
-    assert(wfile)  --打开时验证是否出错
-    wfile:write(info)  --写入传入的内容
-    wfile:close()  --调用结束后记得关闭
+local debug = function(key, value)
+    ngx.print(key .. ': ' .. value);
+    ngx.exit(200);
 end
 
 -- 检测路径是否目录
 local function is_dir(sPath)
-    if type(sPath) ~= "string" then return false end
+    -- debug('sPath', sPath);
+    if type(sPath) ~= "string" then
+         return false
+    end
 
-    local response = os.execute( "cd " .. sPath )
+    local response = os.execute( "cd " .. sPath .. " 2>&1");
     if response == 0 then
         return true
     end
+
     return false
 end
 
 -- 检测文件是否存在
 local file_exists = function(name)
-    local f=io.open(name,"r")
-    if f~=nil then io.close(f) return true else return false end
-end
-
-local debug = function(key, value)
-    ngx.print(key .. ': ' .. value);
-    ngx.exit(200);
+    local f = io.open(name, "r")
+    if f ~= nil then io.close(f) return true else return false end
 end
 -- }}}
 
 local image_size   = ngx.var.image_size;
-local originalUri  = ngx.var.uri;
 local originalFile = ngx.var.original;
+-- debug('rewrite_uri', ngx.var.rewrite_uri);
 
 -- check original file
 if not file_exists(originalFile) then
@@ -55,19 +51,30 @@ end
 -- debug('originalFile', originalFile);
 -- debug('des_file', ngx.var.file);
 
+if file_exists(ngx.var.file) then
+    -- debug('has file', ngx.var.file);
+    ngx.req.set_uri(ngx.var.rewrite_uri, true);
+    --ngx.exec(ngx.var.rewrite_uri)
+end
+
 if table.contains(image_size_conf, image_size) then
     -- check image dir
     if not is_dir(ngx.var.image_dir) then
         os.execute("mkdir -p " .. ngx.var.image_dir)
     end
 
-    local command = "gm convert " .. originalFile  .. " -thumbnail " .. image_size .. " -background gray -gravity center -extent " .. image_size .. " " .. ngx.var.file;
-    os.execute(command);
+    -- debug('image_dir', ngx.var.image_dir);
+
+    local command = "/Users/hy0kl/local/bin/gm convert " .. originalFile  .. " -thumbnail " .. image_size .. " -background gray -gravity center -extent " .. image_size .. " " .. ngx.var.file;
+    --debug('cmd', command);
+    local ret = os.execute(command);
+    --debug('cmd ret', ret);
 end;
 
+-- debug('file exists', ngx.var.file);
 if file_exists(ngx.var.file) then
-    --ngx.req.set_uri(ngx.var.uri, true);  
-    ngx.exec(ngx.var.uri)
+    ngx.req.set_uri(ngx.var.rewrite_uri, true);
+    --ngx.exec(ngx.var.uri)
 else
     ngx.exit(404)
 end
