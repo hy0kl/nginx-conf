@@ -4,7 +4,7 @@ upstream fdfs.com {
 
 server {
     listen       80 default_server;
-    server_name  localhost;
+    server_name  local;
 
     root html;
     #access_log  logs/dev.access.log  main;
