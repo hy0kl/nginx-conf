@@ -22,6 +22,11 @@ server {
         root   html;
     }
 
+    location /basic_status {
+        stub_status on;
+        access_log off;
+    }
+
     location ~ /fdfs/(.*) {
         proxy_pass http://fdfs.com/$1;
     }
