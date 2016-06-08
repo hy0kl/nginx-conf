@@ -13,6 +13,7 @@ server {
     #error_page  404              /404.html;
 
     location / {
+        try_files $uri $uri/  /indexx.php?$args;
         index index.php index.html index.htm;
     }
     # redirect server error pages to the static page /50x.html
@@ -21,6 +22,7 @@ server {
     location = /50x.html {
         root   html;
     }
+
 
     location /basic_status {
         stub_status on;
@@ -78,11 +80,15 @@ server {
         include        fastcgi_params;
     }
 
+    location ~ /php-fpm-status {
+        include fastcgi_params;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
     location /nginx_status {
         stub_status on;
         access_log   off;
-        #allow  10.2.48.0/24;
-        #deny all;
     }
 
     # deny access to .htaccess files, if Apache's document root
