@@ -21,7 +21,7 @@ server {
 
     location / { 
         #proxy_redirect on;
-        proxy_pass http://pkg.freebsd.org;                                                                                                 
+        proxy_pass http://pkg.freebsd.org;
 
         #Proxy Settings
         #proxy_set_header Accept-Encoding "";
@@ -30,4 +30,3 @@ server {
         error_page 500 502 504 @redirect;
     }   
 }
-
