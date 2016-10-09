@@ -5,6 +5,23 @@ server {
 
     #server_name_in_redirect off;
 
+    # 针对 location 做 ip 限制
+    location ~ /admin/ {
+        allow 127.0.0.1;
+        allow 192.168.11.13;
+        #allow 192.168.11.13/24;
+        deny all;
+
+        location ~/admin/ {
+            rewrite "^(.*)$" /index.php  break;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            fastcgi_param  ENVIRONMENT "dev";
+            include        fastcgi_params;
+        }
+    }
+
     location / {
         index index.html index.php;
 
@@ -31,6 +48,5 @@ server {
         fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
         include        fastcgi_params;
     }
-
 }
 
