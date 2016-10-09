@@ -6,13 +6,13 @@ server {
     #server_name_in_redirect off;
 
     # 针对 location 做 ip 限制
-    location ~ /admin/ {
+    location ~* /admin/ {
         allow 127.0.0.1;
         allow 192.168.11.13;
         #allow 192.168.11.13/24;
         deny all;
 
-        location ~/admin/ {
+        location ~* /admin/ {
             rewrite "^(.*)$" /index.php  break;
             fastcgi_pass   127.0.0.1:9000;
             fastcgi_index  index.php;
